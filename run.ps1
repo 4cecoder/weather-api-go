@@ -347,6 +347,7 @@ try {
     Write-Host "🌐 Available URLs:" -ForegroundColor White
     Write-Host "   • Backend API:    http://localhost:3000" -ForegroundColor Cyan
     Write-Host "   • Frontend Dev:   http://localhost:5173" -ForegroundColor Cyan
+    Write-Host "   • API Docs:       http://localhost:3000/docs (Interactive Documentation)" -ForegroundColor Cyan
     Write-Host "   • Health Check:   http://localhost:3000/api/health" -ForegroundColor Cyan
     Write-Host "   • Weather API:    http://localhost:3000/api/weather?lat=40.7128&lon=-74.0060" -ForegroundColor Cyan
     Write-Host ""

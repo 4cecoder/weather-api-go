@@ -185,6 +185,7 @@ main() {
     echo "🌐 Available URLs:"
     echo "   • Backend API:    http://localhost:3000"
     echo "   • Frontend Dev:   http://localhost:5173"
+    echo "   • API Docs:       http://localhost:3000/docs (Interactive Documentation)"
     echo "   • Health Check:   http://localhost:3000/api/health"
     echo "   • API Weather:    http://localhost:3000/api/weather?lat=40.7128&lon=-74.0060"
     echo ""
