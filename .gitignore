@@ -36,6 +36,9 @@ frontend/dist/
 frontend/bun.lockb
 *.log
 
+# Built assets
+dist/
+
 # IDE
 .idea/
 .vscode/
