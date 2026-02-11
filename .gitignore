@@ -30,6 +30,12 @@ weather-api-go
 # Test files
 test_*.db
 
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/bun.lockb
+*.log
+
 # IDE
 .idea/
 .vscode/

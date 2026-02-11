@@ -1,0 +1,69 @@
+package services
+
+import (
+	"weather-api-go/internal/models"
+	"weather-api-go/internal/repository"
+)
+
+// WeatherService handles weather-related business logic
+type WeatherService struct {
+	repo      *repository.WeatherRepository
+	nwsClient *NWSAPIClient
+}
+
+// NewWeatherService creates a new weather service
+func NewWeatherService(repo *repository.WeatherRepository, nwsClient *NWSAPIClient) *WeatherService {
+	return &WeatherService{
+		repo:      repo,
+		nwsClient: nwsClient,
+	}
+}
+
+// GetTemperatureCharacterization categorizes temperature as hot, cold, or moderate
+func (s *WeatherService) GetTemperatureCharacterization(tempC float64) string {
+	if tempC >= 30.0 {
+		return "hot"
+	} else if tempC <= 10.0 {
+		return "cold"
+	}
+	return "moderate"
+}
+
+// GetWeather retrieves weather data with caching
+func (s *WeatherService) GetWeather(lat, lon float64) (*models.WeatherResponse, error) {
+	// Try to get from cache
+	cachedWeather, err := s.repo.GetFromCache(lat, lon)
+	if err == nil && s.repo.IsCacheFresh(cachedWeather) {
+		return &models.WeatherResponse{
+			Forecast:     cachedWeather.Forecast,
+			Temperature:  s.GetTemperatureCharacterization(cachedWeather.TempC),
+			TemperatureC: cachedWeather.TempC,
+		}, nil
+	}
+
+	// Fetch fresh data from NWS
+	weather, err := s.nwsClient.GetForecast(lat, lon)
+	if err != nil {
+		// Return stale cache if available
+		if cachedWeather != nil {
+			return &models.WeatherResponse{
+				Forecast:     cachedWeather.Forecast,
+				Temperature:  s.GetTemperatureCharacterization(cachedWeather.TempC),
+				TemperatureC: cachedWeather.TempC,
+			}, nil
+		}
+		return nil, err
+	}
+
+	// Save to cache
+	if err := s.repo.SaveToCache(weather); err != nil {
+		// Log error but don't fail the request
+		// logger.Printf("Failed to cache weather data: %v", err)
+	}
+
+	return &models.WeatherResponse{
+		Forecast:     weather.Forecast,
+		Temperature:  s.GetTemperatureCharacterization(weather.TempC),
+		TemperatureC: weather.TempC,
+	}, nil
+}

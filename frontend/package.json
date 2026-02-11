@@ -1,0 +1,35 @@
+{
+  "name": "weather-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun vite",
+    "build": "tsc && bunx --bun vite build",
+    "preview": "bunx --bun vite preview",
+    "test": "bunx --bun vitest",
+    "test:e2e": "bunx playwright test",
+    "test:e2e:ui": "bunx playwright test --ui"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.17.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^0.563.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/leaflet": "^1.9.8",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "jsdom": "^23.0.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vitest": "^1.1.0"
+  }
+}
