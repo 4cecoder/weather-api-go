@@ -22,6 +22,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/redis/go-redis/v9"
 
 	"weather-api-go/internal/handlers"
