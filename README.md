@@ -1,52 +1,101 @@
 # Weather API Service
 
-A production-ready Go service that provides weather forecasts based on latitude and longitude coordinates using the National Weather Service API. The service features dual-layer caching (Redis + SQLite), OpenAPI documentation, and Docker support.
+<p align="center">
+  <a href="https://github.com/4cecoder">
+    <img src="https://img.shields.io/badge/GitHub-4cecoder-667eea?style=for-the-badge&logo=github" alt="GitHub">
+  </a>
+  <a href="https://github.com/4cecoder/weather-api-go">
+    <img src="https://img.shields.io/badge/Repo-weather--api--go-764ba2?style=for-the-badge" alt="Repository">
+  </a>
+</p>
 
-## Features
+A production-ready weather service with a modern layered architecture, featuring an interactive web interface, futuristic API documentation, and dual-layer caching. Built with Go, React + TanStack, and OpenStreetMap.
 
-- **Weather Forecast**: Returns today's short forecast and temperature characterization
-- **Dual Caching**: Redis (fast, in-memory) + SQLite (persistent, fallback)
-- **Temperature Classification**: Hot (≥30°C), Cold (≤10°C), or Moderate
-- **API Documentation**: Auto-generated OpenAPI/Swagger UI
-- **Docker Support**: Multi-stage Docker build with docker-compose
-- **Health Monitoring**: Health check endpoint
-- **Error Handling**: Comprehensive error responses
+![Weather API Screenshot](https://via.placeholder.com/800x400/0f0f23/667eea?text=Weather+API+Interface)
 
-## Quick Start
+## ✨ Features
 
-### Using Docker (Recommended)
+### Backend (Go)
+- **🏗️ Layered Architecture**: Clean separation with handlers → services → repository → models
+- **🔄 Dual-Layer Caching**: Redis (fast in-memory) + SQLite (persistent storage)
+- **🌡️ Temperature Conversion**: API returns both Celsius and Fahrenheit
+- **🗺️ NWS Integration**: Uses National Weather Service API for accurate forecasts
+- **📊 Health Monitoring**: Built-in health check endpoint
+- **🔒 Error Handling**: Comprehensive validation and error responses
+
+### Frontend (React + TanStack)
+- **🎨 Swiss Luxury Design**: Premium, minimalist aesthetic inspired by high-end spas
+- **🗺️ Interactive Map**: OpenStreetMap via Leaflet with click-to-weather functionality
+- **🔄 Temperature Toggle**: Switch between Celsius and Fahrenheit on the fly
+- **📱 Fully Responsive**: Adapts gracefully from desktop to mobile
+- **🎯 Lucide Icons**: No emojis - only high-quality Lucide React icons
+- **⚡ Bun**: Fast package management and builds
+
+### API Documentation
+- **🚀 Futuristic UI**: Modern sci-fi inspired design at `/docs`
+- **🔧 Stoplight Elements**: Interactive OpenAPI documentation (not Swagger)
+- **🎨 Dark Theme**: Gradient backgrounds with glass-morphism effects
+- **📝 Auto-Generated**: OpenAPI spec generated automatically from Go code
+
+## 🚀 Quick Start
+
+### Option 1: One-Command Startup (Recommended)
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/4cecoder/weather-api-go.git
 cd weather-api-go
 
-# Start services with docker-compose
-docker-compose up -d
-
-# Access the API
-curl "http://localhost:3000/weather?lat=40.7128&lon=-74.0060"
-
-# View API documentation
-open http://localhost:3000/swagger/index.html
+# Run everything (backend + frontend)
+./run.sh          # macOS/Linux
+# OR
+.\run.ps1         # Windows
 ```
 
-### Local Development
+Then open:
+- **Main App**: http://localhost:3000
+- **API Docs**: http://localhost:3000/docs
+
+### Option 2: Docker
 
 ```bash
-# Install dependencies
-go mod download
+# Start all services
+docker-compose up -d
 
-# Run the application
-go run main.go
+# View logs
+docker-compose logs -f
 
-# The server will start on http://localhost:3000
+# Stop services
+docker-compose down
 ```
 
-## API Endpoints
+### Option 3: Manual Development
 
-### GET /weather
-Returns the weather forecast for given coordinates.
+```bash
+# Backend
+go build -o weather-api .
+./weather-api
+
+# Frontend (in another terminal)
+cd frontend
+bun install
+bun run dev
+```
+
+## 🌐 Available URLs
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| Main App | http://localhost:3000 | Interactive weather map |
+| Frontend Dev | http://localhost:5173 | React dev server (if running) |
+| **API Docs** | **http://localhost:3000/docs** | **Futuristic API documentation** |
+| Health Check | http://localhost:3000/api/health | Service health status |
+| Weather API | http://localhost:3000/api/weather?lat=40.7128&lon=-74.0060 | Get weather data |
+
+## 📡 API Endpoints
+
+### GET /api/weather
+Returns current weather forecast for coordinates with both Celsius and Fahrenheit.
 
 **Parameters:**
 - `lat` (required): Latitude (-90 to 90)
@@ -54,7 +103,7 @@ Returns the weather forecast for given coordinates.
 
 **Example Request:**
 ```bash
-curl "http://localhost:3000/weather?lat=40.7128&lon=-74.0060"
+curl "http://localhost:3000/api/weather?lat=40.7128&lon=-74.0060"
 ```
 
 **Example Response:**
@@ -62,11 +111,12 @@ curl "http://localhost:3000/weather?lat=40.7128&lon=-74.0060"
 {
   "forecast": "Partly Cloudy",
   "temperature": "moderate",
-  "temperature_c": 22.5
+  "temperature_c": 22.5,
+  "temperature_f": 72.5
 }
 ```
 
-### GET /health
+### GET /api/health
 Health check endpoint.
 
 **Example Response:**
@@ -77,40 +127,97 @@ Health check endpoint.
 }
 ```
 
-### GET /swagger/*
-Interactive API documentation (Swagger UI).
+### GET /docs
+**Futuristic interactive API documentation** - Stoplight Elements with:
+- Auto-generated from OpenAPI spec
+- Try-it-out functionality
+- Dark gradient theme with glow effects
+- Links to GitHub repo
 
-## Architecture
+## 🏗️ Architecture
+
+### Layered Backend Structure
+```
+internal/
+├── handlers/      # HTTP handlers (Fiber)
+│   ├── weather.go # Weather endpoint handlers
+│   └── docs.go    # API documentation
+├── services/      # Business logic
+│   ├── weather.go # Weather service with temp conversion
+│   └── nws_client.go # NWS API client
+├── repository/    # Data access layer
+│   └── weather.go # Redis + SQLite caching
+└── models/        # Data structures
+    └── weather.go # Request/response types
+```
+
+### Frontend Architecture
+```
+frontend/
+├── src/
+│   ├── App.tsx       # Main app with TanStack Query
+│   ├── App.test.tsx  # Unit tests
+│   └── index.css     # Swiss luxury spa styling
+├── e2e/              # Playwright E2E tests
+└── package.json      # Bun dependencies
+```
 
 ### Caching Strategy
+1. **Redis** (Primary): Sub-millisecond response times
+2. **SQLite** (Fallback): Persistent storage for durability
 
-1. **Redis** (Primary Cache): In-memory caching for sub-millisecond response times
-2. **SQLite** (Fallback Cache): Persistent storage for data durability
-
-Cache TTL: 1 hour
+**Cache TTL**: 1 hour
 
 ### Temperature Classification
+- **Hot**: ≥ 30°C (86°F) - shown in coral
+- **Cold**: ≤ 10°C (50°F) - shown in blue
+- **Moderate**: 10°C - 30°C - shown in green
 
-- **Hot**: ≥ 30°C (86°F)
-- **Cold**: ≤ 10°C (50°F)
-- **Moderate**: Between 10°C and 30°C
+## 🧪 Testing
 
-## Project Structure
+### Backend Tests
+```bash
+# Run all Go tests
+make backend-test
 
-```
-weather-api-go/
-├── main.go              # Application entry point
-├── main_test.go         # Unit tests
-├── Dockerfile           # Docker build configuration
-├── docker-compose.yml   # Docker Compose orchestration
-├── go.mod               # Go module dependencies
-├── go.sum               # Go module checksums
-├── .env.example         # Environment variables template
-├── README.md            # This file
-└── weather_cache.db     # SQLite database (auto-created)
+# With coverage
+make test-coverage
 ```
 
-## Environment Variables
+### Frontend Tests
+```bash
+# Run unit tests
+make frontend-test
+
+# Run E2E tests
+make e2e-test
+```
+
+### Full Test Suite
+```bash
+# Run everything (backend + frontend + build)
+make ci
+```
+
+## 🛠️ Development
+
+### Build Pipeline (Organized Stages)
+```bash
+# Backend
+make backend-test      # Stage 1: Run tests
+make backend-build     # Stage 2: Build binary
+make backend-run       # Stage 3: Run locally
+
+# Frontend
+make frontend-deps     # Stage 1: Install deps
+make frontend-test     # Stage 2: Run tests
+make frontend-build    # Stage 3: Build production
+
+# Full CI
+make ci               # Run complete pipeline
+```
+
+### Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -118,76 +225,92 @@ weather-api-go/
 | `REDIS_URL` | Redis connection URL | localhost:6379 |
 | `DATABASE_URL` | SQLite database path | ./weather_cache.db |
 
-## Testing
+## 📁 Project Structure
 
-```bash
-# Run all tests
-go test -v
-
-# Run tests with coverage
-go test -v -cover
-
-# Run benchmarks
-go test -bench=.
+```
+weather-api-go/
+├── cmd/weather-api/           # Application entry point
+├── internal/
+│   ├── handlers/              # HTTP handlers
+│   ├── services/              # Business logic
+│   ├── repository/            # Data access
+│   └── models/                # Data structures
+├── frontend/                  # React + TanStack frontend
+│   ├── src/
+│   ├── e2e/                   # Playwright tests
+│   └── package.json
+├── .github/workflows/         # CI/CD pipeline
+├── dist/frontend/            # Built frontend files
+├── Dockerfile               # Multi-stage Docker build
+├── docker-compose.yml        # Service orchestration
+├── run.sh                    # Unix startup script
+├── run.ps1                   # Windows startup script
+├── Makefile                  # Organized build pipeline
+└── README.md                 # This file
 ```
 
-## Docker Commands
+## 🎨 Design Philosophy
 
-```bash
-# Build and start
-docker-compose up -d
+### Swiss Luxury Spa Aesthetic
+- **Colors**: Neutral luxury tones (warm off-white, pure white, deep charcoal, warm gray)
+- **Accents**: Subtle warm brown and semantic colors (coral for hot, blue for cold, sage for moderate)
+- **Typography**: Inter font family with precise letter-spacing
+- **Spacing**: 8px scale (xs to 3xl) with perfect vertical rhythm
+- **Icons**: Lucide React only - no emojis, maximum elegance
 
-# View logs
-docker-compose logs -f
+### Responsive Breakpoints
+- **Large Desktop** (1440px+): Expanded layout, larger map (600px)
+- **Desktop** (1024px-1440px): Two-column grid, 520px map
+- **Tablet** (768px-1024px): Single column, 400px map
+- **Mobile** (640px): Full-width, 320px map
+- **Small Mobile** (380px): 280px map, optimized spacing
 
-# Stop services
-docker-compose down
+## 📝 Development Notes
 
-# Rebuild after changes
-docker-compose up -d --build
-```
+### Trade-offs & Future Improvements
 
-## Development Notes
+1. **Caching**: Currently uses 1-hour TTL. For production:
+   - Consider stale-while-revalidate pattern
+   - Implement cache warming strategies
+   - Different TTLs for varying freshness needs
 
-### Shortcuts & Trade-offs
+2. **Database**: SQLite for simplicity. For production:
+   - PostgreSQL or MySQL for better concurrency
+   - Connection pooling
+   - Database migrations
 
-1. **Caching Strategy**: Uses a simple 1-hour TTL. In production, consider:
-   - Stale-while-revalidate pattern
-   - Cache warming strategies
-   - Different TTLs for different data freshness requirements
-
-2. **Error Handling**: Falls back to cached data on NWS API failures. For production:
-   - Consider circuit breaker patterns
-   - Add structured logging and monitoring
-   - Implement rate limiting
-
-3. **Database**: SQLite is used for simplicity. For production:
-   - Consider PostgreSQL or MySQL for better concurrency
-   - Add connection pooling
-   - Implement database migrations
-
-4. **Testing**: Currently has unit tests. Consider adding:
-   - Integration tests with NWS API mocking
+3. **Testing**: Unit + E2E tests present. Consider adding:
    - Load tests
-   - End-to-end tests
+   - Chaos engineering tests
+   - Contract tests
 
-## API Documentation
+4. **Monitoring**: Add for production:
+   - Structured logging (e.g., Zap)
+   - Metrics collection (Prometheus)
+   - Distributed tracing
 
-Once the server is running, access the interactive documentation at:
-```
-http://localhost:3000/swagger/index.html
-```
-
-The documentation includes:
-- All available endpoints
-- Request/response schemas
-- Example requests
-- Interactive "Try it out" feature
-
-## Data Source
-
-This service uses the [National Weather Service API](https://api.weather.gov/)
-
-## License
+## 📄 License
 
 MIT License - See LICENSE file for details
+
+## 🤝 Contributing
+
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Follow the existing code style
+4. Add tests for new features
+5. Submit a pull request
+
+## 🙏 Acknowledgments
+
+- [National Weather Service](https://api.weather.gov/) for weather data
+- [OpenStreetMap](https://www.openstreetmap.org/) for map tiles
+- [Stoplight](https://stoplight.io/) for Elements documentation
+- [TanStack](https://tanstack.com/) for Query and modern React patterns
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ by <a href="https://github.com/4cecoder">4cecoder</a></sub>
+</p>
