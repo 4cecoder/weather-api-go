@@ -14,7 +14,9 @@ import {
   CloudLightning,
   Loader2,
   AlertCircle,
-  MousePointer2
+  MousePointer2,
+  ToggleLeft,
+  ToggleRight
 } from 'lucide-react'
 import 'leaflet/dist/leaflet.css'
 
@@ -24,6 +26,7 @@ interface WeatherData {
   forecast: string
   temperature: string
   temperature_c: number
+  temperature_f: number
 }
 
 // Get weather icon based on forecast and temperature
@@ -66,7 +69,12 @@ function LocationMarker({ onLocationSelect }: { onLocationSelect: (lat: number, 
   return null
 }
 
-function WeatherDisplay({ lat, lng }: { lat: number; lng: number }) {
+function WeatherDisplay({ lat, lng, unit, onUnitChange }: { 
+  lat: number; 
+  lng: number;
+  unit: 'C' | 'F';
+  onUnitChange: () => void;
+}) {
   const { data, isLoading, error } = useQuery<WeatherData>({
     queryKey: ['weather', lat, lng],
     queryFn: async () => {
@@ -97,6 +105,9 @@ function WeatherDisplay({ lat, lng }: { lat: number; lng: number }) {
 
   if (!data) return null
 
+  const tempValue = unit === 'C' ? data.temperature_c : data.temperature_f
+  const unitLabel = unit === 'C' ? '°C' : '°F'
+
   return (
     <div className="weather-card" data-testid="weather-card">
       <div className="weather-visual">
@@ -105,10 +116,28 @@ function WeatherDisplay({ lat, lng }: { lat: number; lng: number }) {
       
       <div className="temperature-display">
         <span className="temperature-value" data-testid="temperature">
-          {data.temperature_c.toFixed(1)}
+          {tempValue.toFixed(1)}
         </span>
-        <span className="temperature-unit">°C</span>
+        <span className="temperature-unit">{unitLabel}</span>
       </div>
+      
+      <button 
+        className="unit-toggle" 
+        onClick={onUnitChange}
+        aria-label={`Switch to ${unit === 'C' ? 'Fahrenheit' : 'Celsius'}`}
+      >
+        {unit === 'C' ? (
+          <>
+            <ToggleLeft size={20} strokeWidth={2} />
+            <span>°C</span>
+          </>
+        ) : (
+          <>
+            <ToggleRight size={20} strokeWidth={2} />
+            <span>°F</span>
+          </>
+        )}
+      </button>
       
       <div className={`temperature-badge ${data.temperature}`} data-testid="temperature-label">
         <Thermometer size={14} strokeWidth={2} />
@@ -129,6 +158,11 @@ function WeatherDisplay({ lat, lng }: { lat: number; lng: number }) {
 
 function AppContent() {
   const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [unit, setUnit] = useState<'C' | 'F'>('C')
+
+  const toggleUnit = () => {
+    setUnit(prev => prev === 'C' ? 'F' : 'C')
+  }
 
   return (
     <div className="app">
@@ -174,7 +208,12 @@ function AppContent() {
             <h2>Weather Information</h2>
           </div>
           {selectedLocation ? (
-            <WeatherDisplay lat={selectedLocation.lat} lng={selectedLocation.lng} />
+            <WeatherDisplay 
+              lat={selectedLocation.lat} 
+              lng={selectedLocation.lng} 
+              unit={unit}
+              onUnitChange={toggleUnit}
+            />
           ) : (
             <div className="empty-state">
               <div className="empty-icon">

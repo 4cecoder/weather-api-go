@@ -38,6 +38,7 @@ func (s *WeatherService) GetWeather(lat, lon float64) (*models.WeatherResponse, 
 			Forecast:     cachedWeather.Forecast,
 			Temperature:  s.GetTemperatureCharacterization(cachedWeather.TempC),
 			TemperatureC: cachedWeather.TempC,
+			TemperatureF: cachedWeather.TempF,
 		}, nil
 	}
 
@@ -50,6 +51,7 @@ func (s *WeatherService) GetWeather(lat, lon float64) (*models.WeatherResponse, 
 				Forecast:     cachedWeather.Forecast,
 				Temperature:  s.GetTemperatureCharacterization(cachedWeather.TempC),
 				TemperatureC: cachedWeather.TempC,
+				TemperatureF: cachedWeather.TempF,
 			}, nil
 		}
 		return nil, err
@@ -65,5 +67,6 @@ func (s *WeatherService) GetWeather(lat, lon float64) (*models.WeatherResponse, 
 		Forecast:     weather.Forecast,
 		Temperature:  s.GetTemperatureCharacterization(weather.TempC),
 		TemperatureC: weather.TempC,
+		TemperatureF: weather.TempF,
 	}, nil
 }

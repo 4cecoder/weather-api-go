@@ -7,6 +7,7 @@ type WeatherResponse struct {
 	Forecast     string  `json:"forecast" example:"Partly Cloudy"`
 	Temperature  string  `json:"temperature" example:"moderate"`
 	TemperatureC float64 `json:"temperature_c" example:"22.5"`
+	TemperatureF float64 `json:"temperature_f" example:"72.5"`
 }
 
 // ErrorResponse represents an error response
