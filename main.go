@@ -79,9 +79,10 @@ func main() {
 	weatherService := services.NewWeatherService(weatherRepo, nwsClient)
 	weatherHandler := handlers.NewWeatherHandler(weatherService)
 
-	// Routes
-	app.Get("/weather", weatherHandler.GetWeather)
-	app.Get("/health", weatherHandler.GetHealth)
+	// API Routes
+	api := app.Group("/api")
+	api.Get("/weather", weatherHandler.GetWeather)
+	api.Get("/health", weatherHandler.GetHealth)
 
 	// Serve frontend static files
 	app.Static("/", "./dist/frontend")
