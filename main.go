@@ -84,6 +84,9 @@ func main() {
 	api.Get("/weather", weatherHandler.GetWeather)
 	api.Get("/health", weatherHandler.GetHealth)
 
+	// Futuristic API Documentation
+	app.Get("/docs", handlers.ServeAPIDocs)
+
 	// Serve frontend static files
 	app.Static("/", "./dist/frontend")
 
