@@ -249,21 +249,9 @@ weather-api-go/
 └── README.md                 # This file
 ```
 
-## 🎨 Design Philosophy
+## 🎨 Design
 
-### Swiss Luxury Spa Aesthetic
-- **Colors**: Neutral luxury tones (warm off-white, pure white, deep charcoal, warm gray)
-- **Accents**: Subtle warm brown and semantic colors (coral for hot, blue for cold, sage for moderate)
-- **Typography**: Inter font family with precise letter-spacing
-- **Spacing**: 8px scale (xs to 3xl) with perfect vertical rhythm
-- **Icons**: Lucide React only - no emojis, maximum elegance
-
-### Responsive Breakpoints
-- **Large Desktop** (1440px+): Expanded layout, larger map (600px)
-- **Desktop** (1024px-1440px): Two-column grid, 520px map
-- **Tablet** (768px-1024px): Single column, 400px map
-- **Mobile** (640px): Full-width, 320px map
-- **Small Mobile** (380px): 280px map, optimized spacing
+Premium, minimalist aesthetic with Swiss luxury influences. Uses Lucide React icons exclusively (no emojis), neutral color palette, and responsive design from desktop to mobile.
 
 ## 📝 Development Notes
 
