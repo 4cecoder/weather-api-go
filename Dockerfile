@@ -32,8 +32,8 @@ WORKDIR /root/
 # Copy Go binary
 COPY --from=go-builder /app/weather-api .
 
-# Copy frontend build
-COPY --from=frontend-builder /app/dist ../dist/frontend
+# Copy frontend build (vite outputs to ../dist/frontend from /app, so it's at /dist/frontend)
+COPY --from=frontend-builder /dist/frontend ./dist/frontend
 
 EXPOSE 3000
 
