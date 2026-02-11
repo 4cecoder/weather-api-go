@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: weather-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  weather-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: weather-api
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - weather_data:/root/data
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  weather_data:
