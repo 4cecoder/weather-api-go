@@ -58,7 +58,7 @@ func (s *WeatherService) GetWeather(lat, lon float64) (*models.WeatherResponse, 
 	}
 
 	// Save to cache (ignore errors, don't fail the request)
-	s.repo.SaveToCache(weather)
+	_ = s.repo.SaveToCache(weather)
 
 	return &models.WeatherResponse{
 		Forecast:     weather.Forecast,
